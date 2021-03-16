@@ -3,3 +3,4 @@
 export(read_clim)
 export(read_dbem)
 export(read_dbem_ens)
+export(summary_clim)
