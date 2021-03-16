@@ -36,11 +36,11 @@ read_dbem <- function(taxon_key,
   # ----------------#
 
   # Set CMIP 5 or CMIP 6 paths on drobo
-  if(cmip = 5){
+  if(cmip == 5){
     cmip_path <- "/DATA/DATA/DBEM/"
   }
 
-  if(cmip = 6){
+  if(cmip == 6){
     cmip_path <- "/DATA/DATA/DBEM/"
   }
 
@@ -61,7 +61,7 @@ read_dbem <- function(taxon_key,
 
     if(model == "All"){
 
-      if(cmip = 5){
+      if(cmip == 5){
 
       D_Path <- c(paste(root_path,cmip_path,"/GFDL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
                         sep=""),
@@ -72,7 +72,7 @@ read_dbem <- function(taxon_key,
       )
       }
 
-      if(cmip = 6){
+      if(cmip == 6){
 
         D_Path <- c(paste(root_path,cmip_path,"/GFDL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
                           sep=""),
