@@ -28,9 +28,9 @@ read_dbem(
 
 \item{data_type}{select Catch or Abd data}
 
-\item{my_path}{If you have a completely different path for the data. Note that you still have to respect "model/rcp/taxonkey/" structure}
+\item{root_path}{Expects the root computer path before DROBO. Note: do not include /}
 
-\item{path}{Expects the root computer path before DROBO. Note: do not include /}
+\item{my_path}{If you have a completely different path for the data. Note that you still have to respect "model/rcp/taxonkey/" structure}
 }
 \value{
 A tidy table -tiddy- with the DBEM data selected
