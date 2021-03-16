@@ -11,26 +11,26 @@ read_dbem(
   model = "All",
   rcp,
   data_type,
-  path,
+  root_path,
   my_path = FALSE
 )
 }
 \arguments{
 \item{taxon_key}{is the species to load as taxon key number.}
 
-\item{year}{expects a year of sequence of years to load the data from 1951 to 2099}
+\item{year}{expects a sequence of years to load the data from}
 
-\item{cmip}{can be cmip 5 or 6. Note that 5 only has 3 ESMs}
+\item{cmip}{can be 5 for CMIP5 or 6 CMPI6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM}
 
-\item{model}{is the ESM models to load; GFDL; IPSL, MPI, CNRM, UKESM. For all models select "All"}
+\item{model}{is the ESM models to load; GFDL; IPSL, MPI, CNRM, UKESM. For all models select "All";}
 
 \item{rcp}{expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario}
 
 \item{data_type}{select Catch or Abd data}
 
-\item{path}{Expects the head computer path before DROBO. Note: do not include /}
-
 \item{my_path}{If you have a completely different path for the data. Note that you still have to respect "model/rcp/taxonkey/" structure}
+
+\item{path}{Expects the root computer path before DROBO. Note: do not include /}
 }
 \value{
 A tidy table -tiddy- with the DBEM data selected
