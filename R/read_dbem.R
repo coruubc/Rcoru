@@ -10,7 +10,7 @@
 #' @param cmip can be 5 for CMIP5 or 6 CMPI6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM
 #' @param rcp expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario
 #' @param data_type select Catch or Abd data
-#' @param path Expects the root computer path before DROBO. Note: do not include /
+#' @param root_path Expects the root computer path before DROBO. Note: do not include /
 #' @param my_path If you have a completely different path for the data. Note that you still have to respect "model/rcp/taxonkey/" structure
 #' @return A tidy table -tiddy- with the DBEM data selected
 #' @export
