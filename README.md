@@ -19,3 +19,7 @@ A package with functions related to CORU
 
 - You will need to be connected to the UBC network for any function to work
 - Paths are like the ocean, in constant change! Unfortunately, the functions are not that dynamic!
+
+# Needs the following packages
+
+- "tibble","dplyr","data.table","ggplot2","here"
