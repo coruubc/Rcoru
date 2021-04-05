@@ -10,7 +10,6 @@
 #' @param rcp expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario
 #' @param variable expects a variable to be load
 #' @param years expects a sequence of years to load the data from
-#' @param root_path Expects the root computer path before DROBO. Note: do not include /
 #' @param box Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database
 #' @param plot_type determines the type of plot you want. Options include: time_line, a timeline of the environ data (geom_line)
 
@@ -30,7 +29,7 @@ summary_clim <- function(
   # ----------------#
   # Packages needed
   # ----------------#
-  library <- c("tibble","dplyr","data.table","ggplot2")
+  library <- c("tibble","dplyr","data.table","ggplot2","here")
   lapply(library, require, character.only = TRUE)
 
   if(cmip == 6){
@@ -47,9 +46,9 @@ summary_clim <- function(
 
   # Totalphy is the only variable with a different format
   if(variable == "totalphy2"){
-    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip,model,rcp,"/",variable,years,".txt",sep="")
+    data_path <- paste(here("/DATA/DATA/Environmental data/",cmip,model,rcp,"/",variable,years,".txt",sep=""))
   }else{
-    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip,model,rcp,"/",variable,"_",years,".txt",sep="")
+    data_path <- paste(here("/DATA/DATA/Environmental data/",cmip,model,rcp,"/",variable,"_",years,".txt",sep=""))
   }
 
   # Checking step

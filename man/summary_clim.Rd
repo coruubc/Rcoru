@@ -26,8 +26,6 @@ summary_clim(
 
 \item{years}{expects a sequence of years to load the data from}
 
-\item{root_path}{Expects the root computer path before DROBO. Note: do not include /}
-
 \item{box}{Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database}
 
 \item{plot_type}{determines the type of plot you want. Options include: time_line, a timeline of the environ data (geom_line)}

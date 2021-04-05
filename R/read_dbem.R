@@ -48,7 +48,7 @@ read_dbem <- function(taxon_key,
   if(my_path == FALSE){
 
     # Double check path provided is correct
-    dbem_path <- paste(root_path,cmip_path,sep="")
+    dbem_path <- paste(here(cmip_path),sep="")
     # dbem_path <- paste(path,sep="")
 
     if(file.exists(dbem_path) == "FALSE"){
@@ -63,33 +63,33 @@ read_dbem <- function(taxon_key,
 
       if(cmip == 5){
 
-      D_Path <- c(paste(root_path,cmip_path,"/GFDL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+      D_Path <- c(paste(here(cmip_path,"/GFDL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                         sep=""),
-                  paste(root_path,cmip_path,"/IPSL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+                  paste(here(cmip_path,"/IPSL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                         sep=""),
-                  paste(root_path,cmip_path,"/MPI",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+                  paste(here(cmip_path,"/MPI",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                         sep="")
       )
       }
 
       if(cmip == 6){
 
-        D_Path <- c(paste(root_path,cmip_path,"/GFDL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+        D_Path <- c(paste(here(cmip_path,"/GFDL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                           sep=""),
-                    paste(root_path,cmip_path,"/IPSL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+                    paste(here(cmip_path,"/IPSL",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                           sep=""),
-                    paste(root_path,cmip_path,"/MPI",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+                    paste(here(cmip_path,"/MPI",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                           sep=""),
-                    paste(root_path,cmip_path,"/CNRM",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+                    paste(here(cmip_path,"/CNRM",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                           sep=""),
-                    paste(root_path,cmip_path,"/UKESM",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+                    paste(here(cmip_path,"/UKESM",rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                           sep="")
         )
       }
 
     }else{
 
-      D_Path <- paste(root_path,cmip_path,"/",model,rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+      D_Path <- paste(here(cmip_path,"/",model,rcp,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                       sep="")
 
 

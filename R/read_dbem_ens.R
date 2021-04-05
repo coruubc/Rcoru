@@ -27,7 +27,7 @@ read_dbem_ens <- function(taxon_key,
   # ----------------#
   # Functions needed
   # ----------------#
-  library <- c("data.table","dplyr")
+  library <- c("data.table","dplyr","here")
   lapply(library, require, character.only = TRUE)
 
   # ----------------#
@@ -57,17 +57,7 @@ read_dbem_ens <- function(taxon_key,
   }else{
 
     # Main path where I store my data
-    if(Sys.info()[7] == "carmelia"){
-      dbem_path <- "/Volumes/HALL2000/Data/DBEM"
-    }
-    if(Sys.info()[7] == "jepa88"){
-      dbem_path <- "Z:/Data/DBEM"
-    }
-    if(Sys.info()[7] == "hall1000"){
-      dbem_path <- "/Volumes/DATA/DATA/DBEM"
-    }
-
-    D_Path <- paste(dbem_path,"/mpa0F1ENS",ensemble,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+    D_Path <- paste(here("/mpa0F1ENS",ensemble,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
                     sep="")
   }
 
@@ -76,8 +66,6 @@ read_dbem_ens <- function(taxon_key,
     stop()
   }
   #----------------------------#
-
-
 
   # ----------------#
   #### Importing data

@@ -17,8 +17,6 @@ read_clim(cmip, model, rcp, variable, years, root_path, box = FALSE)
 
 \item{years}{expects a sequence of years to load the data from}
 
-\item{root_path}{Expects the root computer path before DROBO. Note: do not include /}
-
 \item{box}{Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database}
 }
 \description{
