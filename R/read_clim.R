@@ -4,7 +4,7 @@
 #' and have access to the CORU-DROBO in order to use the function. Note that no user/id will be
 #' required but the path wont be found.
 #'
-#' @param cmip can be 5 for CMIP5 or 6 CMPI6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM
+#' @param cmip can be 5 for CMIP5 or 6 cmip6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM
 #' @param model is the ESM models to load; GFDL; IPSL, MPI, CNRM, UKESM. For all models select "All";
 #' @param rcp expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario
 #' @param variable expects a variable to be load
@@ -29,11 +29,11 @@ read_clim <- function(
   lapply(library, require, character.only = TRUE)
 
   if(cmip == 6){
-    cmip <-  "CMIP6_DATA/for_DBEM/C6"
+    cmip_path <-  "CMIP6_DATA/for_DBEM/C6"
   }
 
   if(cmip == 5){
-    cmip <-  "CMPI5_DATA/"
+    cmip_path <-  "CMPI5_DATA/"
   }
 
   # -------------- #
@@ -42,25 +42,26 @@ read_clim <- function(
 
   # Totalphy is the only variable with a different format
   if(variable == "totalphy2"){
-    data_path <- paste(here("/DATA/DATA/Environmental data/",cmip,model,rcp,"/",variable,years,".txt",sep=""))
+    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip_path,model,rcp,"/",variable,years,".txt",sep="")
   }else{
-    data_path <- paste(here("/DATA/DATA/Environmental data/",cmip,model,rcp,"/",variable,"_",years,".txt",sep=""))
+    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip_path,model,rcp,"/",variable,"_",years,".txt",sep="")
   }
 
   # Checking step
-  if(file.exists(data_path) == "FALSE"){
+  if(file.exists(data_path)[1] == "FALSE"){
     print(paste("Oh-oh, looks like your root path is wrong. Or maybe data was moved? Path:",data_path))
     stop()
   }
 
   # Message to user
-  print(paste("You are loading",variable, "for the CMIP",cmpi,"ESM",model,"under rcp",rcp,"for",length(years), "years"))
+  print(paste("You are loading",variable, "for the CMIP",cmip,model,"ESM","under rcp",rcp,"for",length(years), "years"))
 
   # -------------- #
   # Load raw data
   # -------------- #
 
   if(box == FALSE){
+    suppressMessages(
     clim_data <- bind_cols(
       lapply(data_path, fread)
     ) %>%
@@ -68,6 +69,7 @@ read_clim <- function(
              model = paste0("C",cmip,model),
              rcp = rcp) %>%
       select(model,rcp,variable,everything())
+    )
 
     colnames(clim_data) <- c("model","rcp","variable",years)
 
@@ -103,3 +105,7 @@ read_clim <- function(
   return(clim_data)
 
 }
+
+
+read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
+
