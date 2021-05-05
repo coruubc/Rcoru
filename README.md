@@ -13,6 +13,7 @@ A package with functions related to CORU
 
 Each new function should have at least the following documentation:
 
+- `#' @author
 - `#' @export` 
 - `#' @param` 
 - `#' @return`
