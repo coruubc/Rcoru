@@ -1,9 +1,10 @@
 #' Reads ocean variables from ESMs
 #'
-#' This function loads reads oceanic climate variables from DROBO. You have to be connected to the UBC network
+#' This function reads oceanic climate variables from DROBO. You have to be connected to the UBC network
 #' and have access to the CORU-DROBO in order to use the function. Note that no user/id will be
 #' required but the path wont be found.
 #'
+#' @author Juliano Palacios Abrantes | j.palacios@oceans.ubc
 #' @param cmip can be 5 for CMIP5 or 6 cmip6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM
 #' @param esm is the ESM esms to load; GFDL; IPSL, MPI, CNRM, UKESM. For all esms select "All";
 #' @param rcp expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario
@@ -11,6 +12,18 @@
 #' @param years expects a sequence of years to load the data from
 #' @param box Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database
 #' @param coords This is the DBEM/CORU coordinate grid with index, lon and lat
+#' @return A tibble with the environmental data requested for the wolrd or a speicifc box
+#' @examples
+#' Change the root_path before running
+#' One variable
+#' read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
+#'
+#' Multiple variables with the lapply family
+#' variables <-c ("O2_btm","htotal_btm")
+#' lapply(variables,read_clim, cmip= 6, esm = "IPSL",rcp = 85, years = c(1951,1921), root_path = "/Volumes")
+#'
+#' For specific Box. Note requires coordinate system
+#' read_clim("GFDL",85,"SST",c(1951,1952), root_path = "/Volumes", box = c(28,74,-110,-170), coords = Lon_Lat_DBEM)
 #' @export
 #'
 read_clim <- function(
@@ -118,31 +131,3 @@ read_clim <- function(
   return(clim_data)
 
 }
-
-# Testing the function
-
-# Testing for one variable
-read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
-
-dbem_names<-c("O2_btm",
-              "htotal_btm",
-               "totalphy2",
-              "Salinity_btm",
-              "bot_temp",
-              "IceExt",
-              "O2_surf",
-              "htotal_surf",
-              "Salinity_surf",
-              "SST",
-              "AdvectionU",
-              "AdvectionV")
-
-lapply(dbem_names,read_clim, cmip= 6, esm = "IPSL",rcp = 85, years = c(1951,1921), root_path = "/Volumes")
-
-
-# Test box option
-Lon_Lat_DBEM <- read.csv("/Volumes/DATA/JULIANO_NEYMAR/FishForVisa/Data/Spatial/Lon_Lat_DBEM.txt", header=FALSE)
-
-
-read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes", box = c(28,74,-110,-170), coords = Lon_Lat_DBEM)
-

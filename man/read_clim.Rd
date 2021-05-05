@@ -4,12 +4,21 @@
 \alias{read_clim}
 \title{Reads ocean variables from ESMs}
 \usage{
-read_clim(cmip, model, rcp, variable, years, root_path, box = FALSE)
+read_clim(
+  cmip = 6,
+  esm,
+  rcp,
+  variable,
+  years,
+  root_path,
+  box = FALSE,
+  coords = FALSE
+)
 }
 \arguments{
-\item{cmip}{can be 5 for CMIP5 or 6 CMPI6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM}
+\item{cmip}{can be 5 for CMIP5 or 6 cmip6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM}
 
-\item{model}{is the ESM models to load; GFDL; IPSL, MPI, CNRM, UKESM. For all models select "All";}
+\item{esm}{is the ESM esms to load; GFDL; IPSL, MPI, CNRM, UKESM. For all esms select "All";}
 
 \item{rcp}{expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario}
 
@@ -18,9 +27,29 @@ read_clim(cmip, model, rcp, variable, years, root_path, box = FALSE)
 \item{years}{expects a sequence of years to load the data from}
 
 \item{box}{Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database}
+
+\item{coords}{This is the DBEM/CORU coordinate grid with index, lon and lat}
+}
+\value{
+A tibble with the environmental data requested for the wolrd or a speicifc box
 }
 \description{
-This function loads reads oceanic climate variables from DROBO. You have to be connected to the UBC network
+This function reads oceanic climate variables from DROBO. You have to be connected to the UBC network
 and have access to the CORU-DROBO in order to use the function. Note that no user/id will be
 required but the path wont be found.
+}
+\examples{
+Change the root_path before running
+One variable
+read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
+
+Multiple variables with the lapply family
+variables <-c ("O2_btm","htotal_btm")
+lapply(variables,read_clim, cmip= 6, esm = "IPSL",rcp = 85, years = c(1951,1921), root_path = "/Volumes")
+
+For specific Box. Note requires coordinate system
+read_clim("GFDL",85,"SST",c(1951,1952), root_path = "/Volumes", box = c(28,74,-110,-170), coords = Lon_Lat_DBEM)
+}
+\author{
+Juliano Palacios Abrantes | j.palacios@oceans.ubc
 }
