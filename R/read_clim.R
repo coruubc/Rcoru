@@ -40,7 +40,7 @@ read_clim <- function(
   # ----------------#
   # Packages needed
   # ----------------#
-  library <- c("tibble","dplyr","data.table","here")
+  library <- c("tibble","dplyr","data.table")
   lapply(library, require, character.only = TRUE)
 
   if(cmip == 6){
