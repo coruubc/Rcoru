@@ -1,4 +1,4 @@
-#' Reads distribution of taxons
+#' Reads SAU distribution of taxons
 #'
 #' This function loads the distribution of a taxon from DROBO. You have to be connected to the UBC network
 #' and have access to the CORU-DROBO in order to use the function. You can choose to return the data or just a plot for visualization Note that no user/id will be
@@ -8,6 +8,8 @@
 #' @param taxon_key is the species to load as taxon key number.
 #' @param box Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database
 #' @param root_path Expects the root computer path before DROBO. Note: do not include /
+#' @examples
+#' read_distribution(600004,output = "data",root_path = "/Volumes",coords = Lon_Lat_DBEM)
 #' @return A data frame or a map showing the distribution of the taxa
 #'
 #'#' @export
@@ -17,9 +19,10 @@ read_distribution <- function(taxon_key, root_path = NA, output = "plot", coords
   lapply(library, require, character.only = TRUE)
 
 # Set distribution path
-  dist_path <- paste0(root_path,"/DATA/DATA/DBEM/")
+  dist_path <- paste0(root_path,"/DATA/DATA/SAU_SppDistributions/S",taxon_key,".csv")
 
-  distribution <- read.csv(dist_path, head = F)
+  distribution <- data.table::fread(dist_path, head = F)
+  colnames(distribution) <- "dis"
 
   if(output == "data"){
     return(distribution)
@@ -30,19 +33,21 @@ read_distribution <- function(taxon_key, root_path = NA, output = "plot", coords
     if(hasArg(coords) == FALSE){
       print(paste("You need to load the DBEM coordinate system"))
       stop()
+    }else{
+      colnames(coords) <- c("index","lon","lat")
     }
 
     # Plot map
     map <- coords %>%
       bind_cols(distribution) %>%
-      filter(V1 > 0) %>%
+      filter(dis > 0) %>%
       ggplot() +
       geom_tile(
         aes(
           x = lon,
           y = lat,
-          fill = V1,
-          col = V1
+          fill = dis,
+          col = dis
         )
       ) +
       coord_quickmap() +
