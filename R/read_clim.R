@@ -10,6 +10,7 @@
 #' @param variable expects a variable to be load
 #' @param years expects a sequence of years to load the data from
 #' @param box Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database
+#' @param coords This is the DBEM/CORU coordinate grid with index, lon and lat
 #' @export
 #'
 read_clim <- function(
@@ -19,7 +20,8 @@ read_clim <- function(
   variable,
   years,
   root_path,
-  box = FALSE
+  box = FALSE,
+  coords = FALSE
 ){
 
   # ----------------#
@@ -83,6 +85,16 @@ read_clim <- function(
     lon_l <- box[4]
 
     # Load data
+
+    # Stop in case you do not have coordinates
+    if(coords == FALSE){
+      print(paste("You need to load the DBEM coordinate system"))
+      stop()
+    }
+
+    colnames(coords) <- c("index","lon","lat")
+
+    suppressMessages( # new names message for multiple columns
     clim_data <- bind_cols(
       lapply(data_path, fread)
     ) %>%
@@ -90,13 +102,14 @@ read_clim <- function(
              esm = paste0("C",cmip,esm),
              rcp = rcp) %>%
       rowid_to_column("index") %>%
-      left_join(lon_lat_grid,
+      left_join(coords,
                 by = "index") %>%
       filter(
         lat >= lat_l, lat <= lat_h,
         lon >= -lon_h & lon <= -lon_l
       ) %>%
       select(esm,rcp,variable,index,lon,lat,everything())
+    )
 
     colnames(clim_data) <- c("esm","rcp","variable","index","lon","lat",years)
 
@@ -107,6 +120,10 @@ read_clim <- function(
 }
 
 # Testing the function
+
+# Testing for one variable
+read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
+
 dbem_names<-c("O2_btm",
               "htotal_btm",
                "totalphy2",
@@ -122,5 +139,10 @@ dbem_names<-c("O2_btm",
 
 lapply(dbem_names,read_clim, cmip= 6, esm = "IPSL",rcp = 85, years = c(1951,1921), root_path = "/Volumes")
 
-read_clim(5,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
+
+# Test box option
+Lon_Lat_DBEM <- read.csv("/Volumes/DATA/JULIANO_NEYMAR/FishForVisa/Data/Spatial/Lon_Lat_DBEM.txt", header=FALSE)
+
+
+read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes", box = c(28,74,-110,-170), coords = Lon_Lat_DBEM)
 
