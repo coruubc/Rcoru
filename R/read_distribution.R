@@ -11,15 +11,13 @@
 #' @return A data frame or a map showing the distribution of the taxa
 #'
 #'#' @export
-read_distribution <- function(taxon_key, root_path = NA, output = "plot", coords = NA){
+read_distribution <- function(taxon_key, root_path = NA, output = "plot", coords = FALSE){
 
   library <- c("ggplot2","dplyr")
   lapply(library, require, character.only = TRUE)
 
-
-  # dist_path <- paste0(root_path,"/DATA/DATA/DBEM/")
-
-  dist_path <- paste0("/Volumes/Enterprise/Data/Species/Distributions/S",taxon_key,".csv")
+# Set distribution path
+  dist_path <- paste0(root_path,"/DATA/DATA/DBEM/")
 
   distribution <- read.csv(dist_path, head = F)
 
@@ -29,8 +27,8 @@ read_distribution <- function(taxon_key, root_path = NA, output = "plot", coords
 
   if(output == "plot"){
 
-    if(is.na(coords) == TRUE){
-      print("Error. coords not found. You need to provide the CORU coordinate system named as (index,long,lat)")
+    if(hasArg(coords) == FALSE){
+      print(paste("You need to load the DBEM coordinate system"))
       stop()
     }
 
