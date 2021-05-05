@@ -62,7 +62,7 @@ read_clim <- function(
   # Load raw data
   # -------------- #
 
-  if(box == FALSE){
+  if(hasArg(box) == FALSE){
     suppressMessages(
     clim_data <- bind_cols(
       lapply(data_path, fread)
@@ -87,7 +87,7 @@ read_clim <- function(
     # Load data
 
     # Stop in case you do not have coordinates
-    if(coords == FALSE){
+    if(hasArg(coords) == FALSE){
       print(paste("You need to load the DBEM coordinate system"))
       stop()
     }
