@@ -23,3 +23,7 @@ A package with functions related to CORU
 # Needs the following packages
 
 - "tibble","dplyr","data.table","ggplot2","here"
+
+# Contributors
+
+- Juliano Palacios Abrantes
