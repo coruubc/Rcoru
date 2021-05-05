@@ -5,7 +5,7 @@
 #' required but the path wont be found.
 #'
 #' @param cmip can be 5 for CMIP5 or 6 cmip6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM
-#' @param model is the ESM models to load; GFDL; IPSL, MPI, CNRM, UKESM. For all models select "All";
+#' @param esm is the ESM esms to load; GFDL; IPSL, MPI, CNRM, UKESM. For all esms select "All";
 #' @param rcp expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario
 #' @param variable expects a variable to be load
 #' @param years expects a sequence of years to load the data from
@@ -13,8 +13,8 @@
 #' @export
 #'
 read_clim <- function(
-  cmip,
-  model,
+  cmip = 6,
+  esm,
   rcp,
   variable,
   years,
@@ -42,9 +42,9 @@ read_clim <- function(
 
   # Totalphy is the only variable with a different format
   if(variable == "totalphy2"){
-    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip_path,model,rcp,"/",variable,years,".txt",sep="")
+    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip_path,esm,rcp,"/",variable,years,".txt",sep="")
   }else{
-    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip_path,model,rcp,"/",variable,"_",years,".txt",sep="")
+    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip_path,esm,rcp,"/",variable,"_",years,".txt",sep="")
   }
 
   # Checking step
@@ -54,7 +54,7 @@ read_clim <- function(
   }
 
   # Message to user
-  print(paste("You are loading",variable, "for the CMIP",cmip,model,"ESM","under rcp",rcp,"for",length(years), "years"))
+  print(paste("You are loading",variable, "for the CMIP",cmip,esm,"ESM","under rcp",rcp,"for",length(years), "years"))
 
   # -------------- #
   # Load raw data
@@ -66,12 +66,12 @@ read_clim <- function(
       lapply(data_path, fread)
     ) %>%
       mutate(variable = variable,
-             model = paste0("C",cmip,model),
+             esm = paste0("C",cmip,esm),
              rcp = rcp) %>%
-      select(model,rcp,variable,everything())
+      select(esm,rcp,variable,everything())
     )
 
-    colnames(clim_data) <- c("model","rcp","variable",years)
+    colnames(clim_data) <- c("esm","rcp","variable",years)
 
   }else{
     # If you want a specific box in the world
@@ -87,7 +87,7 @@ read_clim <- function(
       lapply(data_path, fread)
     ) %>%
       mutate(variable = variable,
-             model = paste0("C",cmip,model),
+             esm = paste0("C",cmip,esm),
              rcp = rcp) %>%
       rowid_to_column("index") %>%
       left_join(lon_lat_grid,
@@ -96,9 +96,9 @@ read_clim <- function(
         lat >= lat_l, lat <= lat_h,
         lon >= -lon_h & lon <= -lon_l
       ) %>%
-      select(model,rcp,variable,index,lon,lat,everything())
+      select(esm,rcp,variable,index,lon,lat,everything())
 
-    colnames(clim_data) <- c("model","rcp","variable","index","lon","lat",years)
+    colnames(clim_data) <- c("esm","rcp","variable","index","lon","lat",years)
 
   }
 
@@ -106,6 +106,21 @@ read_clim <- function(
 
 }
 
+# Testing the function
+dbem_names<-c("O2_btm",
+              "htotal_btm",
+               "totalphy2",
+              "Salinity_btm",
+              "bot_temp",
+              "IceExt",
+              "O2_surf",
+              "htotal_surf",
+              "Salinity_surf",
+              "SST",
+              "AdvectionU",
+              "AdvectionV")
 
-read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
+lapply(dbem_names,read_clim, cmip= 6, esm = "IPSL",rcp = 85, years = c(1951,1921), root_path = "/Volumes")
+
+read_clim(5,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
 
