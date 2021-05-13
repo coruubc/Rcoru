@@ -20,8 +20,7 @@ read_dbem_ens <- function(taxon_key,
                           rcp = 85,
                           ensemble,
                           data_type,
-                          path,
-                          my_path = FALSE
+                          root_path
 ){
 
   # ----------------#
@@ -46,23 +45,12 @@ read_dbem_ens <- function(taxon_key,
   # ----------------#
   # Set paths
   # ----------------##
-
-  # Double check path provided is correct
-
-  if(my_path == TRUE){
-
-    D_Path <- paste(path,"mpa0F1ENS",ensemble,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+    D_Path <- paste(root_path,"mpa0F1ENS",ensemble,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
                     sep="")
 
-  }else{
-
-    # Main path where I store my data
-    D_Path <- paste(here("/mpa0F1ENS",ensemble,"/",taxon_key,"/",taxon_key,data_type,year,".txt"),
-                    sep="")
-  }
-
-  if(file.exists(dbem_path) == "FALSE"){
-    print(paste("Oh-oh, looks like your path is wrong. Path:",dbem_path))
+# Warning message if path does not exist
+  if(file.exists(D_Path) == "FALSE"){
+    print(paste("Oh-oh, looks like your path is wrong. Path:",D_Path))
     stop()
   }
   #----------------------------#
