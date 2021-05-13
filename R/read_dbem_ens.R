@@ -4,14 +4,22 @@
 #' You have to be connected to the UBC network and have access to the CORU-DROBO in order to use the function.
 #' Note that user/id will not be required but the path wont be found.
 #' #'
+#' @author Juliano Palacios Abrantes | j.palacios@oceans.ubc.ca
 #' @param taxon_key is the species to load as taxon key number
-#' @param year expects a year of sequence of years to load the data from 1951 to 2099
+#' @param year expects a year or a sequence of years to load the data from 1951 to 2099
 #' @param model is the ESM models to load; GFDL; IPSL, MPI. For all models select "All". Note that for now model is set to GFDL since is the only one we have
 #' @param rcp expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario. For now set to 85 as we do not have other
 #' @param ensemble Expects the ensemble number. Note, it wont load all ensembles at a time. Limited to 10 ensembles available
 #' @param data_type expects Catch or Abd data
 #' @param path Expects the computer head path before DROBO. Do not include /
-#' @return A tibble with the data
+#' @param ensemble expects an ensemble member. Options range from 102 to 112
+
+#' @examples
+#' Read one year one ensemble
+#'read_dbem_ens(600004, 2021, model = "GFDL", rcp = 85, ensemble = 102, data_type = "Abd", root_path =  "/Volumes/DATA/")
+#' Read multiple years one ensemble
+#'read_dbem_ens(600004, seq(2000,2021,1), model = "GFDL", rcp = 85, ensemble = 102, data_type = "Abd", root_path =  "/Volumes/DATA/")
+#' @return A tibble with the DBEM data
 #' @export
 #'
 read_dbem_ens <- function(taxon_key,
@@ -99,13 +107,3 @@ read_dbem_ens <- function(taxon_key,
 
   return(df)
 }
-
-
-read_dbem_ens(600004,
-              c(2020,2021),
-                          model = "GFDL",
-                          rcp = 85,
-                          ensemble = 102,
-                          data_type = "Abd",
-                          root_path =  "/Volumes/DATA/"
-)
