@@ -35,3 +35,6 @@ This function loads reads oceanic climate variables from DROBO. You have to be c
 and have access to the CORU-DROBO in order to use the function. Note that no user/id will be
 required but the path wont be found.
 }
+\author{
+Juliano Palacios Abrantes | j.palacios@oceans.ubc
+}

@@ -4,16 +4,16 @@
 \alias{vb_test_run}
 \title{Checking if the VB protocol worked properly}
 \usage{
-vb_test_run(yr, model, ssp, variable)
+vb_test_run(model, ssp, variable, years)
 }
 \arguments{
-\item{yr}{A set of years to run the function}
-
 \item{model}{The Earth System model that will be running. Part of the path. Needs to match the file name}
 
 \item{ssp}{The SSP to run. Part of the path. Needs to match the file name}
 
 \item{variable}{Expects the name of the variable to be converted. Part of the path. Needs to match the file name}
+
+\item{years}{A set of years to run the function}
 }
 \value{
 Returns three plots to visualize differences; a histogram, a historic line and a map of 10 years average
@@ -26,4 +26,7 @@ need to be different from each other, otherwise something went
 wrong with the VB simulation. Expects the processed data to be
 saved in the same root that raw data within a folder called
 Processed720_Annualaverage_txt. File names must be the same.
+}
+\author{
+Juliano Palacios Abrantes | j.palacios@oceans.ubc
 }

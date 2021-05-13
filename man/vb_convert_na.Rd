@@ -2,20 +2,20 @@
 % Please edit documentation in R/vb_convert_na.R
 \name{vb_convert_na}
 \alias{vb_convert_na}
-\title{Transform NAs for th visual basic extrapolation}
+\title{Transform NAs for the visual basic extrapolation}
 \usage{
 vb_convert_na(
-  yr,
+  cimip = 6,
   model,
   ssp,
   variable,
-  cimip = 6,
+  years,
   overwrite = T,
   save_path = NA
 )
 }
 \arguments{
-\item{yr}{A set of years to run the function}
+\item{cimip}{The number of the modeling project. Currently set to 6}
 
 \item{model}{The Earth System model that will be running. Part of the path. Needs to match the file name}
 
@@ -23,11 +23,11 @@ vb_convert_na(
 
 \item{variable}{Expects the name of the variable to be converted. Part of the path. Needs to match the filename}
 
-\item{cimip}{The number of the modeling project. Currently set to 6}
+\item{years}{A set of years to run the function}
 
 \item{overwrite}{The result of the function will overwrite the original file. Set to F if you do not want this option. If F, a save path needs to be provided. Normally set to T.}
 
-\item{save_path}{Expects a path to save the data. Needs overwrite = T. Do not include / at the end of the path}
+\item{save_path}{Expects a path to save the data. Needs overwrite = F. Do not include / at the end of the path}
 }
 \value{
 It does not return anything. This function will overwrite the original file unless the parameter overwrite = F
@@ -36,4 +36,7 @@ It does not return anything. This function will overwrite the original file unle
 This function transforms any NA value to -9999. It assumes the data is in the
 DROBO under the folder Environmental data/CMIPx_DATA. You need to have access to the DROBO
 in order to use this function. VB step 1/6
+}
+\author{
+Juliano Palacios Abrantes | j.palacios@oceans.ubc
 }

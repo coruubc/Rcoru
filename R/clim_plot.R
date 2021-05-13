@@ -4,7 +4,7 @@
 #' and have access to the CORU-DROBO in order to use the function. Note that no user/id will be
 #' required but the path wont be found.
 #'
-#'
+#' @author Juliano Palacios Abrantes | j.palacios@oceans.ubc
 #' @param cmip can be 5 for CMIP5 or 6 CMPI6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM
 #' @param model is the ESM models to load; GFDL; IPSL, MPI, CNRM, UKESM. For all models select "All";
 #' @param rcp expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario

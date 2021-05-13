@@ -7,15 +7,16 @@
 #'  wrong with the VB simulation. Expects the processed data to be
 #'  saved in the same root that raw data within a folder called
 #'  Processed720_Annualaverage_txt. File names must be the same.
-
-#' @param yr A set of years to run the function
+#'
+#' @author Juliano Palacios Abrantes | j.palacios@oceans.ubc
 #' @param model The Earth System model that will be running. Part of the path. Needs to match the file name
-#' @param variable Expects the name of the variable to be converted. Part of the path. Needs to match the file name
 #' @param ssp The SSP to run. Part of the path. Needs to match the file name
+#' @param variable Expects the name of the variable to be converted. Part of the path. Needs to match the file name
+#' @param years A set of years to run the function
 #' @return Returns three plots to visualize differences; a histogram, a historic line and a map of 10 years average
 #'
 #' @export
-vb_test_run <- function(yr,model,ssp,variable){
+vb_test_run <- function(model, ssp, variable,years){
 
 
   ## Set data paths ##

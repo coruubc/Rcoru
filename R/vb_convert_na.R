@@ -4,17 +4,18 @@
 #' DROBO under the folder Environmental data/CMIPx_DATA. You need to have access to the DROBO
 #' in order to use this function. VB step 1/6
 #'
-#' @param yr A set of years to run the function
-#' @param model The Earth System model that will be running. Part of the path. Needs to match the file name
-#' @param variable Expects the name of the variable to be converted. Part of the path. Needs to match the filename
-#' @param ssp The SSP to run. Part of the path. Needs to match the file name
+#' @author Juliano Palacios Abrantes | j.palacios@oceans.ubc
 #' @param cimip The number of the modeling project. Currently set to 6
+#' @param model The Earth System model that will be running. Part of the path. Needs to match the file name
+#' @param ssp The SSP to run. Part of the path. Needs to match the file name
+#' @param variable Expects the name of the variable to be converted. Part of the path. Needs to match the filename
+#' @param years A set of years to run the function
 #' @param overwrite The result of the function will overwrite the original file. Set to F if you do not want this option. If F, a save path needs to be provided. Normally set to T.
 #' @param save_path Expects a path to save the data. Needs overwrite = F. Do not include / at the end of the path
 #' @return It does not return anything. This function will overwrite the original file unless the parameter overwrite = F
 #'
 #' @export
-vb_convert_na <- function(year, model, ssp, variable, cimip = 6, overwrite = T, save_path = NA){
+vb_convert_na <- function(cimip = 6, model, ssp, variable, years, overwrite = T, save_path = NA){
 
   # loop it for both ssp
   for(s in 1:length(ssp)){
