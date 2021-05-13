@@ -4,6 +4,7 @@
 #' and have access to the CORU-DROBO in order to use the function. Note that no user/id will be
 #' required but the path wont be found.
 #'
+#' @author Juliano Palacios Abrantes | j.palacios@oceans.ubc.ca
 #' @param taxon_key is the species to load as taxon key number.
 #' @param year expects a sequence of years to load the data from
 #' @param model is the ESM models to load; GFDL; IPSL, MPI, CNRM, UKESM. For all models select "All";

@@ -11,31 +11,39 @@ read_dbem_ens(
   rcp = 85,
   ensemble,
   data_type,
-  path,
-  my_path = FALSE
+  root_path
 )
 }
 \arguments{
 \item{taxon_key}{is the species to load as taxon key number}
 
-\item{year}{expects a year of sequence of years to load the data from 1951 to 2099}
+\item{year}{expects a year or a sequence of years to load the data from 1951 to 2099}
 
 \item{model}{is the ESM models to load; GFDL; IPSL, MPI. For all models select "All". Note that for now model is set to GFDL since is the only one we have}
 
 \item{rcp}{expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario. For now set to 85 as we do not have other}
 
-\item{ensemble}{Expects the ensemble number. Note, it wont load all ensembles at a time. Limited to 10 ensembles available}
+\item{ensemble}{expects an ensemble member. Options range from 102 to 112}
 
 \item{data_type}{expects Catch or Abd data}
 
 \item{path}{Expects the computer head path before DROBO. Do not include /}
 }
 \value{
-A tibble with the data
+A tibble with the DBEM data
 }
 \description{
 This function loads the DBEM files from the GFDL 8.5 ensemble member from the CORU-DROBO.
 You have to be connected to the UBC network and have access to the CORU-DROBO in order to use the function.
 Note that user/id will not be required but the path wont be found.
 #'
+}
+\examples{
+Read one year one ensemble
+read_dbem_ens(600004, 2021, model = "GFDL", rcp = 85, ensemble = 102, data_type = "Abd", root_path =  "/Volumes/DATA/")
+Read multiple years one ensemble
+read_dbem_ens(600004, seq(2000,2021,1), model = "GFDL", rcp = 85, ensemble = 102, data_type = "Abd", root_path =  "/Volumes/DATA/")
+}
+\author{
+Juliano Palacios Abrantes | j.palacios@oceans.ubc.ca
 }

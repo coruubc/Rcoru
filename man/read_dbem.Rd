@@ -40,3 +40,6 @@ This function loads the DBEM files from DROBO. You have to be connected to the U
 and have access to the CORU-DROBO in order to use the function. Note that no user/id will be
 required but the path wont be found.
 }
+\author{
+Juliano Palacios Abrantes | j.palacios@oceans.ubc.ca
+}
