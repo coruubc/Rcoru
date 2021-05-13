@@ -45,7 +45,7 @@ read_dbem_ens <- function(taxon_key,
   # ----------------#
   # Set paths
   # ----------------##
-    D_Path <- paste(root_path,"mpa0F1ENS",ensemble,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
+    D_Path <- paste(root_path,"DATA/DBEM/mpa0F1ENS",ensemble,"/",taxon_key,"/",taxon_key,data_type,year,".txt",
                     sep="")
 
 # Warning message if path does not exist
@@ -99,3 +99,13 @@ read_dbem_ens <- function(taxon_key,
 
   return(df)
 }
+
+
+read_dbem_ens(600004,
+              c(2020,2021),
+                          model = "GFDL",
+                          rcp = 85,
+                          ensemble = 102,
+                          data_type = "Abd",
+                          root_path =  "/Volumes/DATA/"
+)
