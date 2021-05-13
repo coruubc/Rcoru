@@ -29,6 +29,12 @@ Each new function should have at least the following documentation:
 - You will need to be connected to the UBC network for any function to work
 - Paths are like the ocean, in constant change! Unfortunately, the functions are not that dynamic!
 
+# Working functions
+
+- `read_clim` function is working as of May 2020 ((Needs double checking
+- `read_DBEM` function is working as of May 2020 (Needs double checking)
+
+
 # Needs the following packages
 
 - "tibble","dplyr","data.table","ggplot2","here"
