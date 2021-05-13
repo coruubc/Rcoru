@@ -4,7 +4,8 @@
 \alias{read_distribution}
 \title{Reads SAU distribution of taxons}
 \usage{
-read_distribution(taxon_key, root_path = NA, output = "plot", coords = FALSE)
+read_distribution(taxon_key, root_path = NA, output = "plot",
+  coords = FALSE)
 }
 \arguments{
 \item{taxon_key}{is the species to load as taxon key number.}
