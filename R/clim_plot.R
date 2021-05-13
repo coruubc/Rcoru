@@ -46,9 +46,9 @@ summary_clim <- function(
 
   # Totalphy is the only variable with a different format
   if(variable == "totalphy2"){
-    data_path <- paste(here("/DATA/DATA/Environmental data/",cmip,model,rcp,"/",variable,years,".txt",sep=""))
+    data_path <- paste(here("/DATA/Environmental data/",cmip,model,rcp,"/",variable,years,".txt",sep=""))
   }else{
-    data_path <- paste(here("/DATA/DATA/Environmental data/",cmip,model,rcp,"/",variable,"_",years,".txt",sep=""))
+    data_path <- paste(here("/DATA/Environmental data/",cmip,model,rcp,"/",variable,"_",years,".txt",sep=""))
   }
 
   # Checking step

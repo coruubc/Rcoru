@@ -57,9 +57,9 @@ read_clim <- function(
 
   # Totalphy is the only variable with a different format
   if(variable == "totalphy2"){
-    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip_path,esm,rcp,"/",variable,years,".txt",sep="")
+    data_path <- paste(root_path,"/DATA/Environmental data/",cmip_path,esm,rcp,"/",variable,years,".txt",sep="")
   }else{
-    data_path <- paste(root_path,"/DATA/DATA/Environmental data/",cmip_path,esm,rcp,"/",variable,"_",years,".txt",sep="")
+    data_path <- paste(root_path,"/DATA/Environmental data/",cmip_path,esm,rcp,"/",variable,"_",years,".txt",sep="")
   }
 
   # Checking step

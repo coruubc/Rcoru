@@ -25,7 +25,7 @@ read_distribution <- function(taxon_key, root_path = NA, output = "plot", coords
   lapply(library, require, character.only = TRUE)
 
 # Set distribution path
-  dist_path <- paste0(root_path,"/DATA/DATA/SAU_SppDistributions/S",taxon_key,".csv")
+  dist_path <- paste0(root_path,"/DATA/SAU_SppDistributions/S",taxon_key,".csv")
 
   distribution <- data.table::fread(dist_path, head = F)
   colnames(distribution) <- "dis"
