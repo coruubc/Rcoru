@@ -32,7 +32,8 @@ Each new function should have at least the following documentation:
 # Working functions
 
 - `read_clim` function is working as of May 2020 ((Needs double checking
-- `read_DBEM` function is working as of May 2020 (Needs double checking)
+- `read_dbem` function is working as of May 2020 (Needs double checking)
+- `read_dbem_ens` function is working as of May 2020 (Needs double checking)
 - `clim_plot` function is working as of May 2020 (Needs double checking)
 
 
