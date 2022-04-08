@@ -1,0 +1,409 @@
+---
+title: "CIMIP6 data processing"
+author: "Juliano Palacios Abrantes"
+date: "10/2/2020"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This script was used to prepare the CMIP6 files for the VB code.
+
+```{r setup, include=FALSE}
+
+library(MyFunctions)
+
+my_lib(c(
+  "tidyverse",
+  "doParallel",
+  "foreach")
+)
+
+
+```
+
+# This protocol 
+
+This protocol is intended to downscale the Earth System models (ESM) from 1 x 1 degrees latitude longitude resolution to a 0.5 x 0.5 resolution. 
+
+- All of the functions needed for this protocol are identified with a `vb_` in the name (e.g., `vb_test_rub.R`).
+
+- Does have parallel computing 
+
+- Variables to transform are "BO2","BPH","NPP","SBS","SBT","SIC","SO2","SPH","SSS","SST","U","V","NPPPICO","NPPDIAT","NPPDIAZ"
+
+- Each step has a verification step right after. 
+
+Steps to follow:
+
+- Replace NAN for -9999
+- Run VB protocol on Virtual Basic .exe program (outside R)
+- Run check in protocol 
+
+
+
+## Replace NAN for -9999
+
+
+The DBEM VB code uses `-9999` in cells where no data is available while ESMs identify these cells as `NA`. This step standardizes the data to `-9999`.
+
+
+### Run replace NA function
+
+*Note:* **this script overrides the original file!**
+
+```{r replace_na_control_pannel, echo=FALSE, results='hide'}
+
+# Set the time frame
+yrs <- seq(1850,2100,1) # Make sure you have all years of data
+var_list <- c("BO2","BPH","NPP","SBS","SBT","SIC","SO2","SPH","SSS","SST","U","V","NPPPICO","NPPDIAT","NPPDIAZ")
+esm <- "GFDL-ESM4" # You will need to run the protocol for each ESM
+
+# Set the parallel environment
+
+cores <- ifelse(detectCores() > 12, 12, detectCores()-1)  # get the cores from your computer. No need for more than 12 cores and never use all cores so you computer doesn't crash
+cl <- makeCluster(cores[1])
+registerDoParallel(cl)
+
+# Run parallel protocol
+
+run <- foreach(i = 1:length(var_list), .packages = "tidyverse") %dopar% {
+  
+     print(var_list[1])
+  lapply(yrs, conver_na,
+         model = esm,
+         variable = var_list[1])
+  print(var_list[1])
+  
+}
+stopCluster(cl)
+gc()
+
+
+```
+
+## VB run check protocol
+
+This step double checks that the VB run was successful for all years, variables and models. It produces (saves within DROBO) different plots of the processed data. All generated plots, need to be different from each other, otherwise something went wrong with the VB simulation. Expects the processed data to be saved in the same root that raw data within a folder called `Processed720_Annualaverage_txt`. File names must be the same.
+
+![Plot example for...]()
+
+*Note:* Make sure the paths are correct!
+
+```{r run_check_control_pannel, echo=FALSE}
+
+# DBEM lat long grid
+lon_lat_grid <- read.csv("./DBEM/FishMipMPA/Lon_Lat_DBEM.txt", header=FALSE)
+
+colnames(lon_lat_grid) <- c("index","lon","lat")
+
+# Test years. These can be any, note the more years you use the longer it takes
+yrs <- seq(1850,2100,1)
+
+# Select the ESM you want to test (n = 1) 
+esm_model <- "GFDL-ESM4"
+
+# Select the variables you want to test
+var_list <- c("BO2",
+              "BPH",
+              "NPP",
+              "SBS",
+              "SBT",
+              "SIC",
+              "SO2",
+              "SPH",
+              "SSS",
+              "SST",
+              "U",
+              "V"
+              )
+
+# Run the test for all variables
+lapply(var_list, vb_test_fun, yr = yrs, model = esm_model)
+
+```
+
+
+
+## Check all variables are ran
+
+This part double checks that all of the VB runs were successful. Specifically, it makes sure you run the VB on all the variables, ssps and years you wanted.
+
+It will return direct information on what you are missing (e.g,. "you are missing 1978 fro SST in ssp 126" or "All variables have all years")
+
+
+```{r run_vb_variables_check, echo = F}
+
+esm_model <- "GFDL-ESM4"
+
+vb_test_vars(esm_model)
+
+```
+
+
+# End
+
+This is the end of the protocol. THe steps below apply only to the DBEM.
+
+## DBEM Specific steps
+
+# Rename files
+
+The DBEM uses another file name system than the one we currently use at CORU. This step copies the files to a new folder and re names them according to DBEM's structure. 
+
+*Note:* this folder should eventually be moved to Compute Canada and erased to avoid saturation of the HD. 
+
+```{r rename_files, echo=FALSE}
+
+models <- c("MPI-ESM1-2-HR","IPSL-CM6A-LR","GFDL-ESM4")
+
+n_models = length(models)
+
+
+###------------###
+# Re name for DBEM
+###------------###
+
+var_list <- c("BO2", 
+              "BPH",
+              "SBS",
+              "SBT",
+              "SIC",
+              "SO2",
+              "SPH",
+              "SSS",
+              "SST",
+              "U",
+              "V")
+
+
+dbem_names<-c("O2_btm_",
+              "htotal_btm_",
+              "Salinity_btm_",
+              "bot_temp_",
+              "IceExt_",
+              "O2_surf_",
+              "htotal_surf_",
+              "Salinity_surf_",
+              "SST_",
+              "AdvectionU_",
+              "AdvectionV_")
+
+# For testing 
+processed_path <- setwd("Z:/DATA/Environmental data/CMIP6_DATA/")
+
+
+###------------####
+# Run sequence
+###------------####
+
+mod = NULL
+i = NULL
+j  = NULL
+yr = NULL
+folder = NULL
+
+models <- "UKESM1"
+
+
+for(m in 1:2){
+  
+  files <- list.files(paste0("Z:/DATA/Environmental data/CMIP6_DATA/",models[m],"/Processed720_Annualaverage_txt/"),
+                     # pattern = "SBS",
+                      full.names = T)
+  
+ # head(files)
+  
+  for(i in 1:length(files)){ # Number of files
+    for(j in 1:length(var_list)){ # Number of variables
+      
+      if(str_detect(files[i],var_list[j])){
+        
+        # Get year string
+        yr <- str_sub(files[i], -8)
+        
+        # Identify SSP/RCP
+        
+        if(str_detect(files[i], "ssp126") ==T){
+          mod <- str_sub(models[m],1,4)
+          folder = paste0("C6",mod,"26")
+        }else{
+          folder = paste0("C6",mod,"85")
+        }
+        
+        file.copy(files[i],
+                  paste("Z:/DATA/Environmental data/CMIP6_DATA/for_DBEM/",folder,"/",dbem_names[j],yr,sep="")
+                  #  paste(dbem_names[j],yr,".txt",sep="")
+        )
+      }
+    }  
+  }
+}
+
+
+# Checking
+
+#BO2_processed720_Omon_MPI.ESM1.2.HR_ssp126_annualaverage_year_1987 <- read.table("Z:/DATA/Environmental data/CMIP6_DATA/Test_jepa/ProcessedData/BO2_processed720_Omon_MPI-ESM1-2-HR_ssp126_annualaverage_year_1987.txt", quote="\"", comment.char="")
+
+#O2_btm_1987.txt <- read.table("Z:/DATA/Environmental data/CMIP6_DATA/Test_jepa/ProcessedData/O2_btm_1987.txt.txt", quote="\"", comment.char="")
+
+#bind_cols(BO2_processed720_Omon_MPI.ESM1.2.HR_ssp126_annualaverage_year_1987,
+        #  O2_btm_1987.txt) %>% 
+ # mutate(diff= V1...1-V1...2) %>% 
+#  filter(diff > 0)
+
+# Double check names match
+
+m = 3
+for(v in 1:12){
+  
+  processed_data <- read.table(paste0("Z:/DATA/Environmental data/CMIP6_DATA/",models[m],"/Processed720_Annualaverage_txt/",var_list[v],"_processed720_Omon_",models[m],"_ssp585_annualaverage_year_2090.txt"), quote="\"", comment.char="")
+  
+  dbem_data <- read.table(paste0("Z:/DATA/Environmental data/CMIP6_DATA/for_DBEM/C6GFDL85/",dbem_names[v],"2090.txt"), quote="\"", comment.char="")
+  
+  
+  test <- bind_cols(processed_data,
+                    dbem_data) %>% 
+    mutate(diff= V1...1-V1...2) %>% 
+    filter(diff > 0)
+  
+  if(nrow(test)==0){
+    print(paste(v,models[m],dbem_names[v],var_list[v], "checked"))
+  }else{
+    print(paste(v,models[m],dbem_names[v],var_list[v], "wrong"))
+  }
+}
+
+# MPI 85 missing SBS / Checked!
+# MPI 26 Checked!
+
+# IPSL 85 
+# Missing SBS, all of the others are wrong 
+# Checked!
+# IPSL 85 
+# Missing SO2, all of the others are wrong
+# Cheked!
+
+# GFDL Chekced!
+```
+
+
+## Estimate NPP
+For the DBEM we need to re-estimate NPP from diatoms, npp small and pico as follows:
+
+$$NPPDIAT_* = daitom$$
+
+$$NPPSMALL_* = pico$$
+$$NPP_* = diazotroph$$
+
+```{r add_npp_fun, echo=FALSE}
+
+
+# NPPDIAT_* = daitom, NPPSMALL_* = pico and NPP_* = diazotroph ?
+
+yr <- 1970
+ssp = "585"
+model ="GFDL-ESM2"
+
+totalphy_fun <- function(yr,ssp,model){
+
+  ## Read all processed datasets (VB) ##
+  
+# Diatoms data
+  diat_data <- read.table(paste0("/Volumes/DATA/DATA/Environmental data/CMIP6_DATA/",model,"/Processed720_Annualaverage_txt/NPPDIAT_processed720_Omon_",model,"_ssp",ssp,"_annualaverage_year_",yr,".txt"), quote="\"", comment.char="") %>% 
+    rename(diat=V1)
+  
+  
+  if(model =="IPSL-CM6A-LR"){
+  
+    # Small plancton data
+  small_data <- read.table(paste0("/Volumes/DATA/DATA/Environmental data/CMIP6_DATA/",model,"/Processed720_Annualaverage_txt/NPPSMAL_processed720_Omon_",model,"_ssp",ssp,"_annualaverage_year_",yr,".txt"), quote="\"", comment.char="") %>% 
+    rename(small=V1)
+  
+    # NPP Diaz data
+  npp_data <- read.table(paste0("/Volumes/DATA/DATA/Environmental data/CMIP6_DATA/",model,"/Processed720_Annualaverage_txt/NPP_processed720_Omon_",model,"_ssp",ssp,"_annualaverage_year_",yr,".txt"), quote="\"", comment.char="") %>% 
+    rename(npp=V1)
+  
+  # Esimtaion of NPP Diaz data
+  diaz_data <- bind_cols(diat_data,
+                        small_data,
+                        npp_data
+                        ) %>% 
+  mutate(
+    diaz = npp-diat-small,
+    diazs = ifelse(diaz ==  9999, -9999, diaz)
+  ) %>% 
+  select(diaz)
+  
+  }else{
+
+  # NPP Diaz data
+  diaz_data <- read.table(paste0("/Volumes/DATA/DATA/Environmental data/CMIP6_DATA/",model,"/Processed720_Annualaverage_txt/NPPDIAZ_processed720_Omon_",model,"_ssp",ssp,"_annualaverage_year_",yr,".txt"), quote="\"", comment.char="") %>% 
+    rename(diaz=V1)
+  
+  # Small plancton data
+  small_data <- read.table(paste0("/Volumes/DATA/DATA/Environmental data/CMIP6_DATA/",model,"/Processed720_Annualaverage_txt/NPPPICO_processed720_Omon_",model,"_ssp",ssp,"_annualaverage_year_",yr,".txt"), quote="\"", comment.char="") %>% 
+    rename(small=V1)
+  
+  }
+  
+## Estimate totalphy2 ##
+  
+final_data <- bind_cols(diat_data,
+                        small_data,
+                        diaz_data
+                        ) %>% 
+  mutate(
+    totalphy = (small + diaz)*  0.1  +  diat,
+    totalphy2 = ifelse(totalphy <  -9999, -9999, totalphy)
+  ) %>% 
+  select(totalphy2)
+
+colnames(final_data) <- NULL
+
+# write final dataset
+
+if(ssp == 126){
+  rcp = 26
+}else{
+  rcp = 85
+}
+
+  model_name <- str_sub(model,1,4)
+
+  name <-paste0("/Volumes/DATA/DATA/Environmental data/CMIP6_DATA/for_DBEM/C6",model_name,rcp,"/totalphy2",yr,".txt")
+
+write.csv(x = final_data,
+              name,
+              row.names = F)
+
+}
+
+
+totalphy_fun(1981,126)
+
+yrs <- seq(1850,1949,1)
+gc()
+lapply(yrs, totalphy_fun,ssp = 585, model ="GFDL-ESM4")
+
+lapply(yrs, totalphy_fun,ssp = 126, model ="GFDL-ESM4")
+
+
+lapply(yrs, totalphy_fun,585)
+
+
+
+
+NPPDIAZ_out <- read.table("/Volumes/DATA/JULIANO_NEYMAR/gfdl_nat/NPPDIAT_natural720_Omon_GFDL-ESM4_ssp126_annualaverage_year_1850.txt", quote="\"", comment.char = "") %>% 
+  rowid_to_column()
+
+NPPDIAZ_in <- read.table("/Volumes/DATA/DATA/Environmental data/CMIP6_DATA/GFDL-ESM4/Natural720_Annualaverage_txt/NPPDIAT_natural720_Omon_GFDL-ESM4_ssp126_annualaverage_year_1850.txt", quote="\"", comment.char="") %>% 
+  rowid_to_column()
+
+x <- NPPDIAT_out %>% 
+  left_join(NPPDIAT_in,
+            by = "rowid")
+
+
+
+```
