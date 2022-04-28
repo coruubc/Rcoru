@@ -12,7 +12,7 @@
 #' @param years expects a sequence of years to load the data from
 #' @param box Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database
 #' @param coords This is the DBEM/CORU coordinate grid with index, lon and lat
-#' @return A tibble with the environmental data requested for the wolrd or a speicifc box
+#' @return A tibble with the environmental data requested for the world or a specific box
 #' @examples
 #' Change the root_path before running
 #' One variable
@@ -44,11 +44,11 @@ read_clim <- function(
   lapply(library, require, character.only = TRUE)
 
   if(cmip == 6){
-    cmip_path <-  "CMIP6_DATA/for_DBEM/C6"
+    cmip_path <-  "/DATA/DATA/CMIP6_DATA/for_DBEM/C6/"
   }
 
   if(cmip == 5){
-    cmip_path <-  "CMPI5_DATA/"
+    cmip_path <-  "/DATA/DATA/CMIP5 txt/"
   }
 
   # -------------- #
@@ -57,9 +57,9 @@ read_clim <- function(
 
   # Totalphy is the only variable with a different format
   if(variable == "totalphy2"){
-    data_path <- paste(root_path,"/DATA/Environmental data/",cmip_path,esm,rcp,"/",variable,years,".txt",sep="")
+    data_path <- paste(root_path,cmip_path,esm,rcp,"/",variable,years,".txt",sep="")
   }else{
-    data_path <- paste(root_path,"/DATA/Environmental data/",cmip_path,esm,rcp,"/",variable,"_",years,".txt",sep="")
+    data_path <- paste(root_path,cmip_path,esm,rcp,"/",variable,"_",years,".txt",sep="")
   }
 
   # Checking step
