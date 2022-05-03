@@ -4,8 +4,16 @@
 \alias{summary_clim}
 \title{Reads ocean variables from ESMs}
 \usage{
-summary_clim(cmip, model, rcp, variable, years, root_path, box = FALSE,
-  plot_type)
+summary_clim(
+  cmip,
+  model,
+  rcp,
+  variable,
+  years,
+  root_path,
+  box = FALSE,
+  plot_type
+)
 }
 \arguments{
 \item{cmip}{can be 5 for CMIP5 or 6 CMPI6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM}

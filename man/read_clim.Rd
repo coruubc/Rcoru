@@ -4,8 +4,16 @@
 \alias{read_clim}
 \title{Reads ocean variables from ESMs}
 \usage{
-read_clim(cmip = 6, esm, rcp, variable, years, root_path, box = FALSE,
-  coords = FALSE)
+read_clim(
+  cmip = 6,
+  esm,
+  rcp,
+  variable,
+  years,
+  root_path,
+  box = FALSE,
+  coords = FALSE
+)
 }
 \arguments{
 \item{cmip}{can be 5 for CMIP5 or 6 cmip6. Note that CMPI5 only has GFDL, IPSL and MPI. CMPI6 has additional CNRM and UKESM}
@@ -23,7 +31,7 @@ read_clim(cmip = 6, esm, rcp, variable, years, root_path, box = FALSE,
 \item{coords}{This is the DBEM/CORU coordinate grid with index, lon and lat}
 }
 \value{
-A tibble with the environmental data requested for the wolrd or a speicifc box
+A tibble with the environmental data requested for the world or a specific box
 }
 \description{
 This function reads oceanic climate variables from DROBO. You have to be connected to the UBC network

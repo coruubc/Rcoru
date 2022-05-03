@@ -4,8 +4,15 @@
 \alias{vb_convert_na}
 \title{Transform NAs for the visual basic extrapolation}
 \usage{
-vb_convert_na(cimip = 6, model, ssp, variable, years, overwrite = T,
-  save_path = NA)
+vb_convert_na(
+  cimip = 6,
+  model,
+  ssp,
+  variable,
+  years,
+  overwrite = T,
+  save_path = NA
+)
 }
 \arguments{
 \item{cimip}{The number of the modeling project. Currently set to 6}

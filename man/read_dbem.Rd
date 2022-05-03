@@ -4,8 +4,16 @@
 \alias{read_dbem}
 \title{Reads DBEM files}
 \usage{
-read_dbem(taxon_key, year, cmip, model = "All", rcp, data_type,
-  root_path, my_path = FALSE)
+read_dbem(
+  taxon_key,
+  year,
+  cmip,
+  model = "All",
+  rcp,
+  data_type,
+  root_path,
+  my_path = FALSE
+)
 }
 \arguments{
 \item{taxon_key}{is the species to load as taxon key number.}

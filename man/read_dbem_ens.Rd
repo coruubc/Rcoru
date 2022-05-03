@@ -4,8 +4,15 @@
 \alias{read_dbem_ens}
 \title{Reads DBEM files from the ensemble member modeling with the GFDL}
 \usage{
-read_dbem_ens(taxon_key, year, model = "GFDL", rcp = 85, ensemble,
-  data_type, root_path)
+read_dbem_ens(
+  taxon_key,
+  year,
+  model = "GFDL",
+  rcp = 85,
+  ensemble,
+  data_type,
+  root_path
+)
 }
 \arguments{
 \item{taxon_key}{is the species to load as taxon key number}
@@ -16,13 +23,11 @@ read_dbem_ens(taxon_key, year, model = "GFDL", rcp = 85, ensemble,
 
 \item{rcp}{expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario. For now set to 85 as we do not have other}
 
-\item{ensemble}{Expects the ensemble number. Note, it wont load all ensembles at a time. Limited to 10 ensembles available}
+\item{ensemble}{expects an ensemble member. Options range from 102 to 112}
 
 \item{data_type}{expects Catch or Abd data}
 
 \item{path}{Expects the computer head path before DROBO. Do not include /}
-
-\item{ensemble}{expects an ensemble member. Options range from 102 to 112}
 }
 \value{
 A tibble with the DBEM data

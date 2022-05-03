@@ -4,13 +4,14 @@
 \alias{read_distribution}
 \title{Reads SAU distribution of taxons}
 \usage{
-read_distribution(taxon_key, root_path = NA, output = "plot",
-  coords = FALSE)
+read_distribution(taxon_key, root_path = NA, output = "plot", coords = FALSE)
 }
 \arguments{
 \item{taxon_key}{is the species to load as taxon key number.}
 
 \item{root_path}{Expects the root computer path before DROBO. Note: do not include /}
+
+\item{output}{"OPtions to return data or plot. Default to plot}
 
 \item{box}{Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database}
 }
