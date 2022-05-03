@@ -22,7 +22,7 @@ read_clim(
 
 \item{rcp}{expects "26" for RCP 2.6-low emission scenario and "85" for RCP 8.5-high emission scenario}
 
-\item{variable}{expects a variable to be load}
+\item{variable}{expects a variable to be load. Options include: "AdvectionU","AdvectionV", "bot_temp", "htotal_btm", "htotal_surf", "IceExt", "O2_btm","O2_surf","Salinity_btm","Salinity_surf","SST","totalphy2". Note: if you type "options" the function will print all available variables}
 
 \item{years}{expects a sequence of years to load the data from}
 
@@ -37,18 +37,6 @@ A tibble with the environmental data requested for the world or a specific box
 This function reads oceanic climate variables from DROBO. You have to be connected to the UBC network
 and have access to the CORU-DROBO in order to use the function. Note that no user/id will be
 required but the path wont be found.
-}
-\examples{
-Change the root_path before running
-One variable
-read_clim(6,"GFDL",85,"SST",c(1951,1952), root_path = "/Volumes")
-
-Multiple variables with the lapply family
-variables <-c ("O2_btm","htotal_btm")
-lapply(variables,read_clim, cmip= 6, esm = "IPSL",rcp = 85, years = c(1951,1921), root_path = "/Volumes")
-
-For specific Box. Note requires coordinate system
-read_clim("GFDL",85,"SST",c(1951,1952), root_path = "/Volumes", box = c(28,74,-110,-170), coords = Lon_Lat_DBEM)
 }
 \author{
 Juliano Palacios Abrantes | j.palacios@oceans.ubc
