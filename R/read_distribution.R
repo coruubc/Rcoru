@@ -10,6 +10,7 @@
 #' @param taxon_key is the species to load as taxon key number.
 #' @param box Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database
 #' @param root_path Expects the root computer path before DROBO. Note: do not include /
+#' @param output "OPtions to return data or plot. Default to plot
 #' @examples
 #' Note needs coordinate system for running
 #' output data
