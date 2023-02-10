@@ -12,60 +12,64 @@
 #' @param model The Earth System model that will be running. Part of the path. Needs to match the file name
 #' @param ssp The SSP to run. Part of the path. Needs to match the file name
 #' @param variable Expects the name of the variable to be converted. Part of the path. Needs to match the file name
-#' @param years A set of years to run the function
+#' @param yr A set of years to run the function
 #' @return Returns three plots to visualize differences; a histogram, a historic line and a map of 10 years average
 #'
 #' @export
-vb_test_run <- function(model, ssp, variable,years){
-
+vb_test_run <- function(model, ssp, variable, yr){
 
   ## Set data paths ##
 
   # Raw data path
-  raw_path <- paste(here(),"/DATA/Environmental data/CMIP6_DATA/",model,"/Natural720_Annualaverage_txt/",variable,"_natural720_Omon_",model,"_",ssp,"_annualaverage_year_",yr,".txt",sep="")
+  raw_path <- paste("Z:/DATA/Environmental data/CMIP6_DATA/",model,"/Natural720_Annualaverage_txt/",variable,"_natural720_Omon_",model,"_",ssp,"_annualaverage_year_",yr,".txt",sep="")
 
   # Processed data path
-  processed_path <- paste(here("/DATA/Environmental data/CMIP6_DATA/",model,"/Processed720_Annualaverage_txt/",variable,"_natural720_Omon_",model,"_",ssp,"_annualaverage_year_",yr,".txt",sep=""))
+  processed_path <- paste("Z:/DATA/Environmental data/CMIP6_DATA/",model,"/Processed720_Annualaverage_txt/",variable,"_processed720_Omon_",model,"_",ssp,"_annualaverage_year_",yr,".txt",sep="")
+
 
   # Load raw data
+  suppressMessages(
   raw_data <- bind_cols(
-    lapply(raw_path, read.table,  quote="\"", comment.char="")
+    lapply(raw_path, read.table,  quote="/", comment.char="")
   ) %>%
     mutate(ver = "raw") %>%
     rowid_to_column("index")
-
+  )
   colnames(raw_data) <- c("index",yr,"ver")
 
   # Load processed data
 
 
   # Load raw data
+  suppressMessages(
   processed_data <- bind_cols(
-    lapply(processed_path, read.table,  quote="\"", comment.char="")
+    lapply(processed_path, read.table,  quote="/", comment.char="")
   ) %>%
     mutate(ver = "processed") %>%
     rowid_to_column("index")
+  )
 
   colnames(processed_data) <- c("index",yr,"ver")
 
+  suppressMessages(
   all_data <- raw_data %>%
     bind_rows(processed_data) %>%
-    left_join(lon_lat_grid) %>%
-    gather("year","value",2:12) %>%
-    filter(value !=- 9999,
-           year %in% c(seq(2000,2010,1))
-    ) %>%
+    left_join(lon_lat_grid, by = "index") %>%
+    gather("year","value",2:(length(yr)+1)) %>%
+    filter(value !=- 9999) %>%
     group_by(index,ver,lat,lon) %>%
     summarise(
       mean = mean(value, na.rm= T)
     )
+  )
+
 
   #head(all_data)
-
+  suppressMessages(
   hist_data <- raw_data %>%
     bind_rows(processed_data) %>%
-    left_join(lon_lat_grid) %>%
-    gather("year","value",2:12) %>%
+    left_join(lon_lat_grid, by = "index") %>%
+    gather("year","value",2:(length(yr)+1)) %>%
     filter(value !=- 9999) %>%
     group_by(year,ver) %>%
     summarise(
@@ -73,14 +77,16 @@ vb_test_run <- function(model, ssp, variable,years){
       sum = sum(value,na.rm = T)
     ) %>%
     gather("var","val",mean:sum)
+  )
+
 
   head(hist_data)
 
 
-  plot_name <-paste("Z:/DATA/Environmental data/CMIP6_DATA/Test_jepa/Plots/",model,"_",variable,"_2020_to_2030",sep="")
+  plot_name <-paste("Z:/DATA/Environmental data/CMIP6_DATA/Test_jepa/Plots/",model,"_",variable,"_",yr[1],"_to_",yr[length(yr)],sep="")
 
-  # Gobal map
-  all_data %>%
+  # Gobal map (Can ignore error messages)
+   all_data %>%
     ggplot() +
     geom_tile(
       aes(
@@ -91,7 +97,8 @@ vb_test_run <- function(model, ssp, variable,years){
       )
     ) +
     ggtitle(plot_name) +
-    facet_wrap(~ver) +
+    facet_wrap(~ver)
+
     ggsave(
       plot =last_plot(),
       filename = paste(plot_name,"_glob.png",sep=""),
@@ -99,8 +106,7 @@ vb_test_run <- function(model, ssp, variable,years){
       height = 10
     )
 
-
-  #  Dfferenc map
+  #  Difference map
   all_data %>%
     spread(ver,mean) %>%
     mutate(dif= processed-raw) %>%
@@ -113,7 +119,8 @@ vb_test_run <- function(model, ssp, variable,years){
         color =  dif
       )
     ) +
-    ggtitle(plot_name) +
+    ggtitle(plot_name)
+
     ggsave(
       plot =last_plot(),
       filename = paste(plot_name,"_diff.png",sep=""),
@@ -121,7 +128,7 @@ vb_test_run <- function(model, ssp, variable,years){
       height = 10
     )
 
-  #  Hist plot
+  #  Line plot
   hist_data %>%
     ggplot() +
     geom_line(
@@ -132,7 +139,8 @@ vb_test_run <- function(model, ssp, variable,years){
       )
     ) +
     facet_wrap(~var, scales =  "free") +
-    ggtitle(plot_name) +
+    ggtitle(plot_name)
+
     ggsave(
       plot =last_plot(),
       filename = paste(plot_name,"_hist.png",sep=""),
