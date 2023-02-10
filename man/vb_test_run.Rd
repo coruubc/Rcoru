@@ -4,7 +4,7 @@
 \alias{vb_test_run}
 \title{Checking if the VB protocol worked properly}
 \usage{
-vb_test_run(model, ssp, variable, years)
+vb_test_run(model, ssp, variable, yr)
 }
 \arguments{
 \item{model}{The Earth System model that will be running. Part of the path. Needs to match the file name}
@@ -13,7 +13,7 @@ vb_test_run(model, ssp, variable, years)
 
 \item{variable}{Expects the name of the variable to be converted. Part of the path. Needs to match the file name}
 
-\item{years}{A set of years to run the function}
+\item{yr}{A set of years to run the function}
 }
 \value{
 Returns three plots to visualize differences; a histogram, a historic line and a map of 10 years average

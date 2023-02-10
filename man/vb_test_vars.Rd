@@ -8,21 +8,9 @@ vb_test_vars(model)
 }
 \arguments{
 \item{model}{The Earth System model that will be running. Part of the path. Needs to match the file name}
-
-\item{cimip}{The number of the modeling project. Currently set to 6}
-
-\item{ssp}{The SSP to run. Part of the path. Needs to match the file name}
-
-\item{variable}{Expects the name of the variable to be converted. Part of the path. Needs to match the filename}
-
-\item{years}{A set of years to run the function}
-
-\item{overwrite}{The result of the function will overwrite the original file. Set to F if you do not want this option. If F, a save path needs to be provided. Normally set to T.}
-
-\item{save_path}{Expects a path to save the data. Needs overwrite = F. Do not include / at the end of the path}
 }
 \value{
-It does not return anything. This function will overwrite the original file unless the parameter overwrite = F
+It returns a message informing the completion of the VB runs
 }
 \description{
 This part double checks that the VB runs were successful.
