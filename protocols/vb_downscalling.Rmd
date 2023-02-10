@@ -19,6 +19,8 @@ my_lib(c(
   "foreach")
 )
 
+# Suppress annoying dplyr messages
+options(dplyr.summarise.inform = FALSE)
 
 ```
 
@@ -93,15 +95,18 @@ This step double checks that the VB run was successful for all years, variables 
 ```{r run_check_control_pannel, echo=FALSE}
 
 # DBEM lat long grid
-lon_lat_grid <- read.csv("./DBEM/FishMipMPA/Lon_Lat_DBEM.txt", header=FALSE)
+lon_lat_grid <- read.csv("Z:/JULIANO_NEYMAR/Spatial/DBEM/Lon_Lat_DBEM.txt", header=FALSE)
 
 colnames(lon_lat_grid) <- c("index","lon","lat")
 
 # Test years. These can be any, note the more years you use the longer it takes
-yrs <- seq(1850,2100,1)
+yrs <- seq(1850,1860,1)
+
+# Select the ssp you want to test
+ssp <- "ssp126"
 
 # Select the ESM you want to test (n = 1) 
-esm_model <- "GFDL-ESM4"
+esm_model <- "IPSL-CM6A-LR"
 
 # Select the variables you want to test
 var_list <- c("BO2",
@@ -119,7 +124,10 @@ var_list <- c("BO2",
               )
 
 # Run the test for all variables
-lapply(var_list, vb_test_fun, yr = yrs, model = esm_model)
+lapply(var_list, vb_test_run, yr = yrs, model = esm_model, ssp = ssp)
+
+
+
 
 ```
 
@@ -143,11 +151,11 @@ vb_test_vars(esm_model)
 
 # End
 
-This is the end of the protocol. THe steps below apply only to the DBEM.
+This is the end of the protocol. The steps below apply only to the DBEM.
 
-## DBEM Specific steps
+# DBEM Specific steps
 
-# Rename files
+## Rename files
 
 The DBEM uses another file name system than the one we currently use at CORU. This step copies the files to a new folder and re names them according to DBEM's structure. 
 
