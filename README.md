@@ -5,7 +5,7 @@ A package with functions related to CORU
 
 - Include `#' @export` before the function
 - Include `#' @param` for each parameter of the function
-- Run devtools:document()
+- Run devtools::document()
 - Be happy, like a hippo
 
 
