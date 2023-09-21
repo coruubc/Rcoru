@@ -12,7 +12,8 @@ read_clim(
   years,
   root_path,
   box = FALSE,
-  coords = FALSE
+  coords = FALSE,
+  repository
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ read_clim(
 \item{box}{Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database}
 
 \item{coords}{This is the DBEM/CORU coordinate grid with index, lon and lat}
+
+\item{repository}{If "DROBO" then will expect data tp be in DROBO path, otherwise, inlcude your path here (without root_path)}
 }
 \value{
 A tibble with the environmental data requested for the world or a specific box

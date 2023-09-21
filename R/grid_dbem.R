@@ -44,5 +44,3 @@ grid_dbem <- function(shapefile, dbem_grid, out = "df"){
 }
 
 
-
-}
