@@ -12,6 +12,7 @@
 #' @param years expects a sequence of years to load the data from
 #' @param box Expects a vector with four values in the following order: low lat, high lat, low long and high long to load geographical specific data.. if FALSE it will load global database
 #' @param coords This is the DBEM/CORU coordinate grid with index, lon and lat
+#' @param repository If "DROBO" then will expect data tp be in DROBO path, otherwise, inlcude your path here (without root_path)
 #' @return A tibble with the environmental data requested for the world or a specific box
 #' @examples
 #' Change the root_path before running
@@ -39,7 +40,8 @@ read_clim <- function(
     years,
     root_path,
     box = FALSE,
-    coords = FALSE
+    coords = FALSE,
+    repository
 ){
 
   if(variable == "options"){
@@ -53,12 +55,18 @@ read_clim <- function(
     library <- c("tibble","dplyr","data.table")
     lapply(library, require, character.only = TRUE)
 
+    if(repository == "drobo"){
+
     if(cmip == 6){
       cmip_path <-  "/DATA/DATA/Environmental data/CMIP6_DATA/for_DBEM/C6"
     }
 
     if(cmip == 5){
       cmip_path <-  "/DATA/DATA/CMIP5 txt/"
+    }
+
+    }else{
+      cmip_path <- repository
     }
 
     # -------------- #
