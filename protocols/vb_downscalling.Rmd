@@ -197,6 +197,10 @@ dbem_names<-c("O2_btm_",
               "AdvectionU_",
               "AdvectionV_")
 
+# Make it a DF
+names_df <- data.frame(var_list,dbem_names)
+
+
 # For testing 
 processed_path <- setwd("Z:/DATA/Environmental data/CMIP6_DATA/")
 
@@ -211,40 +215,47 @@ j  = NULL
 yr = NULL
 folder = NULL
 
-models <- "UKESM1"
+models <- c("UKESM1")
 
 
-for(m in 1:2){
+for(m in 1:length(models)){
   
   files <- list.files(paste0("Z:/DATA/Environmental data/CMIP6_DATA/",models[m],"/Processed720_Annualaverage_txt/"),
-                     # pattern = "SBS",
+                      # pattern = "SBS",
                       full.names = T)
   
- # head(files)
+  # head(files)
   
   for(i in 1:length(files)){ # Number of files
-    for(j in 1:length(var_list)){ # Number of variables
-      
-      if(str_detect(files[i],var_list[j])){
-        
-        # Get year string
-        yr <- str_sub(files[i], -8)
-        
-        # Identify SSP/RCP
-        
-        if(str_detect(files[i], "ssp126") ==T){
-          mod <- str_sub(models[m],1,4)
-          folder = paste0("C6",mod,"26")
-        }else{
-          folder = paste0("C6",mod,"85")
-        }
-        
-        file.copy(files[i],
-                  paste("Z:/DATA/Environmental data/CMIP6_DATA/for_DBEM/",folder,"/",dbem_names[j],yr,sep="")
-                  #  paste(dbem_names[j],yr,".txt",sep="")
-        )
-      }
-    }  
+    
+    # Get year string
+    yr <- str_sub(files[i], -8)
+    
+    # Identify SSP/RCP
+    folder <- switch(
+      TRUE,
+      str_detect(files[i], "ssp126") ~ paste0("C6", str_sub(models[m], 1, 4), "26"),
+      str_detect(files[i], "ssp245") ~ paste0("C6", str_sub(models[m], 1, 4), "45"),
+      str_detect(files[i], "ssp585") ~ paste0("C6", str_sub(models[m], 1, 4), "85"),
+      NA
+    )
+    
+    # Create folder in path if it does not yet exists
+    output_directory <- paste0(output_path,folder)
+    if(dir.exists(output_directory) == F){
+      dir.create(output_directory)
+    }
+    
+    # Get variable name for DBEM
+    dbem_name <- names_df %>% 
+      filter(str_detect(var_list,string = files[i])) %>% 
+      pull(dbem_names)
+    
+    # Copy files
+    file.copy(files[i],
+              paste(output_path,folder,"/",dbem_name,yr,sep="")
+              
+    )
   }
 }
 
