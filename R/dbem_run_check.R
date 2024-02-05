@@ -51,12 +51,18 @@ dbem_run_check <- function(results_path = NA, dbem_path = NA, settings = "Settin
   taxon_ran <- length(spp_list)
 
   # Check number of years per species
-
   for(s in 1:taxon_ran){
     # Get info needed
     taxa <- spp_list[s]
 
     read_taxa <- list.files(paste0(results_path,"/",taxa), pattern = taxa,full.names = T)
+
+    # Missing data
+    if(length(read_taxa) ==0){
+      missing_msg <- paste("No data for",taxa)
+      next()
+    }
+
 
     catch_runs <- str_subset(read_taxa, pattern = "Catch")
     abd_runs <- str_subset(read_taxa, pattern = "Abd")
@@ -138,12 +144,16 @@ dbem_run_check <- function(results_path = NA, dbem_path = NA, settings = "Settin
   n_species_msg <- paste("Ran",taxon_ran,"species with",settings_file$value[1],"species per run")
   cat("# Number of species ran\n", n_species_msg, "\n\n")
 
+
+  # Missing data
+  cat("# Missing data\n", missing_msg, "\n\n")
+
   # Potential miss runs
   cat("# Potential miss runs\n")
 
   if(nrow(complete_df) > 7){
 
-    print(complete_df)
+    print(complete_df, n = 1000)
 
   }else{
     cat("All runs are OK\n\n")
